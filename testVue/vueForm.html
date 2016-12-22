@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vueForm</title>
+	<style>
+	[v-cloak]{
+		display:none;
+	}
+	</style>
+</head>
+<body>
+	<div id="ex1">
+		<section>
+			<form action="" v-on:submit.prevent>
+				<input type="hidden" v-bind:value="curIndex">
+				<h3 v-if="isAdd">添加角色</h3>
+				<h3  v-else v-cloak>编辑角色</h3>
+				<label for="">姓名</label>
+				<input type="text" v-model="obj.name">
+				<label for="">年龄 </label>
+				<input type="text" v-model="obj.age">
+				<button v-on:click="add" v-if="isAdd">添加</button>
+				<button v-on:click="save" v-else v-cloak>保存</button>
+			</form>
+		</section>
+		
+		<section>
+			<form action="" v-on:submit.prevent v-show="isShow">
+				<input type="hidden" v-bind:value="curIndex">
+				<h3 v-if="isAdd">添加角色</h3>
+				<h3  v-else v-cloak>编辑角色</h3>
+				<label for="">姓名</label>
+				<input type="text" v-model="obj.name">
+				<label for="">年龄 </label>
+				<input type="text" v-model="obj.age">
+				<button v-on:click="save" v-cloak>保存</button>
+			</form>
+		</section>
+		<ul>
+			<li v-for="item,index in items" v-cloak>
+				<span>姓名：</span>
+				<span>{{item.name}}</span>
+				<span>年龄：</span>
+				<span>{{item.age}}</span>
+				<button v-on:click="edit(index)">修改</button>
+				<button v-on:click="delete1(index)">删除</button>
+			</li>
+		</ul>
+	</div>
+	<script src="js/vue.js"></script>
+	<script src="js/axios.min.js"></script>
+	<script src="js/lodash.min.js"></script>
+	<script>
+		<!-- var myForm = { -->
+			<!-- template:"#form-tp", -->
+			<!-- props:["obj","isAdd","curIndex"], -->
+			<!-- data:function(){ -->
+				<!-- return { -->
+					<!-- obj:obj -->
+				<!-- } -->
+			<!-- } -->
+		<!-- } -->
+		var vm = new Vue({
+			el:"#ex1",
+			data:{
+				obj:{
+					name:'',
+					age:''
+				},
+				items:[
+					{name:'张三',age:12},
+					{name:'李四',age:22},
+					{name:'王五',age:33}
+				],
+				isAdd:true,
+				curIndex:''
+			},
+			methods:{
+				add:function(){
+					this.items.push(this.obj);
+					this.obj = {
+						name:'',
+						age:''
+					}
+				},
+				save:function(){
+					//this.items.splice(this.curIndex,1,this.obj);
+					this.isAdd = true;
+					this.obj = {
+						name:'',
+						age:''
+					}
+				},
+				edit:function(index){
+					this.isAdd = false;
+					this.obj = this.items[index];
+					this.curIndex = index;
+				},
+				delete1:function(index){
+					this.items.splice(index,1);
+				}
+			}
+		})
+	</script>
+</body>
+</html>
